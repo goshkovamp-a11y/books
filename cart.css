@@ -16,12 +16,12 @@ input.cart, button.cart {
   cursor: pointer; 
 }
 
-/* PRODUCTS GRID — уменьшено */
+/* PRODUCTS GRID — МАКСИМАЛЬНО КОМПАКТНО */
 #cart-products { 
   display: grid; 
-  grid-template-columns: repeat(2,1fr); 
-  gap: 6px; 
-  padding: 6px; 
+  grid-template-columns: repeat(3, 1fr); /* 3 товара в ряд */
+  gap: 4px; 
+  padding: 4px; 
 }
 
 .p-item { 
@@ -30,19 +30,19 @@ input.cart, button.cart {
 
 .p-img { 
   width: 100%; 
-  height: 140px;
+  height: 90px;          /* ↓ В 2 раза меньше */
   object-fit: cover;
 }
 
 .p-info { 
-  display: flex; 
-  align-items: center; 
   position: absolute; 
   bottom: 0; 
   left: 0; 
   width: 100%; 
-  padding: 6px; 
-  background: rgba(0,0,0,0.6); 
+  padding: 4px; 
+  background: rgba(0,0,0,0.65); 
+  display: flex;
+  align-items: flex-start;
 }
 
 .p-txt { 
@@ -51,22 +51,25 @@ input.cart, button.cart {
 }
 
 .p-name { 
-  font-weight: 700; 
-  font-size: 0.9em; 
+  font-size: 0.75em; 
+  font-weight: 600;
+  line-height: 1.1;
 }
 
 .p-desc { 
-  font-size: 0.75em; 
+  font-size: 0.65em; 
+  line-height: 1.1;
 }
 
 .p-price { 
-  font-size: 0.8em; 
+  font-size: 0.7em; 
   margin-top: 2px; 
 }
 
 .p-add { 
-  font-size: 0.9em; 
-  padding: 5px 8px;
+  font-size: 0.75em; 
+  padding: 4px 6px;
+  margin-left: 4px;
 }
 
 /* CART ITEMS — НЕ ТРОГАЕМ */
