@@ -16,10 +16,10 @@ input.cart, button.cart {
   cursor: pointer; 
 }
 
-/* PRODUCTS GRID — МАКСИМАЛЬНО КОМПАКТНО */
+/* PRODUCTS GRID */
 #cart-products { 
   display: grid; 
-  grid-template-columns: repeat(3, 1fr); /* 3 товара в ряд */
+  grid-template-columns: repeat(3, 1fr);
   gap: 4px; 
   padding: 4px; 
 }
@@ -30,8 +30,8 @@ input.cart, button.cart {
 
 .p-img { 
   width: 100%; 
-  height: 90px;          /* ↓ В 2 раза меньше */
-  object-fit: cover;
+  height: auto;           /* ← исходные пропорции изображения */
+  display: block;         /* убираем зазор под картинкой */
 }
 
 .p-info { 
@@ -72,7 +72,7 @@ input.cart, button.cart {
   margin-left: 4px;
 }
 
-/* CART ITEMS — НЕ ТРОГАЕМ */
+/* CART ITEMS */
 #cart-items { padding: 10px; }
 
 .c-item { 
