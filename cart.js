@@ -3,7 +3,8 @@ var cart = {
   save:()=>localStorage.setItem("cart",JSON.stringify(cart.items)),
   load:()=>{cart.items=localStorage.getItem("cart"); cart.items=cart.items?JSON.parse(cart.items):{};},
   nuke:()=>{if(confirm("Очистить корзину?")){cart.items={};localStorage.removeItem("cart");cart.list();}},
-  init:()=>{
+  
+  init:()=> {
     cart.hPdt=document.getElementById("cart-products");
     cart.hItems=document.getElementById("cart-items");
     cart.hPdt.innerHTML="";
@@ -18,7 +19,8 @@ var cart = {
     }
     cart.load(); cart.list();
   },
-  list:()=>{
+
+  list:()=> {
     cart.total=0; cart.hItems.innerHTML=""; let empty=true;
     for(let key in cart.items){ if(cart.items.hasOwnProperty(key)){empty=false; break;} }
     if(empty){ cart.hItems.innerHTML="Корзина пуста"; }
@@ -35,47 +37,33 @@ var cart = {
       item=document.createElement("div"); item.className="c-total"; item.id="c-total"; item.innerHTML=`ИТОГ: ${cart.currency}${cart.total}`; cart.hItems.appendChild(item);
       item=document.getElementById("template-cart-checkout").content.cloneNode(true); cart.hItems.appendChild(item);
     }
-    // обновление значка корзины
     let count=0; for(let id in cart.items){ count+=cart.items[id]; }
     document.getElementById("cart-count").textContent=count;
   },
+
   add:id=>{cart.items[id]=cart.items[id]?cart.items[id]+1:1; cart.save(); cart.list();},
-  change:(id,qty)=>{if(qty<=0){delete cart.items[id];cart.save();cart.list();} else{cart.items[id]=Number(qty);cart.total=0;for(let pid in cart.items){cart.total+=cart.items[pid]*products[pid].price; document.getElementById("c-total").innerHTML=`TOTAL: ${cart.currency}${cart.total}`;}} },
+  change:(id,qty)=>{if(qty<=0){delete cart.items[id];cart.save();cart.list();} else{cart.items[id]=Number(qty); cart.total=0; for(let pid in cart.items){cart.total+=cart.items[pid]*products[pid].price;} document.getElementById("c-total").innerHTML=`ИТОГ: ${cart.currency}${cart.total}`;}},
   remove:id=>{delete cart.items[id];cart.save();cart.list();},
+
   checkout: () => {
-  // Проверка, что корзина не пустая
-  if (Object.keys(cart.items).length === 0) {
-    alert("Корзина пуста");
-    return;
+    if (Object.keys(cart.items).length === 0) { alert("Корзина пуста"); return; }
+
+    const merchantLogin = "Techsoprovozhdenie";
+    const password1 = "OJH2T3GWP5rRJpcm7b9g"; // тестовый
+    const outSum = cart.total.toFixed(2);
+    const invId = Date.now();
+    let description = "Оплата книг: ";
+    for (let id in cart.items) {
+      const p = products[id];
+      description += `${p.name} (${cart.items[id]} шт.), `;
+    }
+    description = description.slice(0, -2);
+
+    const signature = md5(`${merchantLogin}:${outSum}:${invId}:${password1}`);
+    const url = `https://auth.robokassa.ru/Merchant/Index.aspx?MerchantLogin=${merchantLogin}&OutSum=${outSum}&InvId=${invId}&Description=${encodeURIComponent(description)}&SignatureValue=${signature}&IsTest=1`;
+
+    window.open(url, "_blank");
   }
-checkout: () => {
-  // Проверка, что корзина не пустая
-  if (Object.keys(cart.items).length === 0) {
-    alert("Корзина пуста");
-    return;
-  }
-  
-  // Параметры Robokassa
-  const merchantLogin = "Techsoprovozhdenie";
-  const password1 = "OJH2T3GWP5rRJpcm7b9g"; // тестовый пароль
-  const outSum = cart.total.toFixed(2);      // сумма корзины из корзины
-  const invId = Date.now();                  // уникальный ID заказа
-  let description = "Оплата книг: ";
+};
 
-  // Формируем описание заказа (список товаров и кол-во)
-  for (let id in cart.items) {
-    const p = products[id];
-    description += `${p.name} (${cart.items[id]} шт.), `;
-  }
-  description = description.slice(0, -2); // убираем последнюю запятую
-
-  // Формируем MD5 подпись
-  const signature = md5(`${merchantLogin}:${outSum}:${invId}:${password1}`);
-
-  // Тестовая ссылка Robokassa
-  const url = `https://auth.robokassa.ru/Merchant/Index.aspx?MerchantLogin=${merchantLogin}&OutSum=${outSum}&InvId=${invId}&Description=${encodeURIComponent(description)}&SignatureValue=${signature}&IsTest=1`;
-
-  // Переходим на страницу оплаты
-  window.open(url, "_blank");}
-    };
 window.addEventListener("DOMContentLoaded",cart.init);
