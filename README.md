@@ -68,7 +68,6 @@
 /cart.js
 /products.js
 /README.md
-/vercel/json
 /images/
   ├─ 1056р.webp
   ├─ 1100р.webp
